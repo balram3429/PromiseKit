@@ -8,9 +8,9 @@ import PromiseKit
 private class CentralManager: CBCentralManager, CBCentralManagerDelegate {
   
   let (promise, fulfill, reject) = CentralManagerPromise.deferred()
-  
-  @objc private func centralManagerDidUpdateState(central: CBCentralManager) {
-    if central.state != .Unknown {
+
+  @objc private func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    if central.state != .unknown {
       fulfill(central)
     }
   }
@@ -30,19 +30,14 @@ extension CBCentralManager {
 
 public class CentralManagerPromise: Promise<CBCentralManager> {
   
-  private let (parentPromise, fulfill, reject) = Promise<CBCentralManager>.pendingPromise()
+  private let (parentPromise, fulfill, reject) = Promise<CBCentralManager>.pending()
   
-  private class func deferred() -> (CentralManagerPromise, CBCentralManager -> Void, ErrorType -> Void) {
-    var fullfill: (CBCentralManager -> Void)!
-    var reject: (ErrorType -> Void)!
+  private class func deferred() -> (CentralManagerPromise, (CBCentralManager) -> Void, (Error) -> Void) {
+    var fullfill: ((CBCentralManager) -> Void)!
+    var reject: ((Error) -> Void)!
     let promise = CentralManagerPromise { fullfill = $0; reject = $1 }
-    promise.parentPromise.then(on: zalgo) { fullfill($0) }
-    promise.parentPromise.error { reject($0) }
+    promise.parentPromise.then(on: zalgo, execute: fullfill)
+    promise.parentPromise.catch(on: zalgo, execute: reject)
     return (promise, promise.fulfill, promise.reject)
   }
-  
-  private override init(@noescape resolvers: (fulfill: (CBCentralManager) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
-    super.init(resolvers: resolvers)
-  }
 }
-

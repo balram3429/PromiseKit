@@ -20,58 +20,44 @@ extension UIViewController {
         let proxy = PMKMessageComposeViewControllerDelegate()
         proxy.retainCycle = proxy
         vc.messageComposeDelegate = proxy
-        presentViewController(vc, animated: animated, completion: completion)
+        present(vc, animated: animated, completion: completion)
         proxy.promise.always {
-            vc.dismissViewControllerAnimated(animated, completion: nil)
+            vc.dismiss(animated: animated, completion: nil)
         }
         return proxy.promise
     }
 }
 
 extension MFMessageComposeViewController {
-    public enum Error: ErrorType {
+    public enum Error: Swift.Error {
         case Cancelled
     }
 }
 
 private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate {
 
-    let (promise, fulfill, reject) = Promise<Void>.pendingPromise()
+    let (promise, fulfill, reject) = Promise<Void>.pending()
     var retainCycle: NSObject?
 
-    @objc func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+    @objc func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         defer { retainCycle = nil }
 
-    #if swift(>=2.3)
         switch result {
-        case .Sent:
+        case .sent:
             fulfill()
-        case .Failed:
+        case .failed:
             var info = [NSObject: AnyObject]()
             info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
-            info[NSUnderlyingErrorKey] = NSNumber(integer: result.rawValue)
+            info[NSUnderlyingErrorKey] = NSNumber(value: result.rawValue)
             reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
-        case .Cancelled:
-            reject(MFMessageComposeViewController.Error.Cancelled)
-        }
-    #else
-        switch result.rawValue {
-        case MessageComposeResultSent.rawValue:
-            fulfill()
-        case MessageComposeResultFailed.rawValue:
-            var info = [NSObject: AnyObject]()
-            info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
-            info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.rawValue)
-            reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
-        case MessageComposeResultCancelled.rawValue:
+        case .cancelled:
             reject(MFMessageComposeViewController.Error.Cancelled)
         default:
             fatalError("Swift Sucks")
         }
-    #endif
     }
 }
 
-public enum MessageUIError: ErrorType {
-    case Failed
+public enum MessageUIError: Error {
+    case failed
 }
