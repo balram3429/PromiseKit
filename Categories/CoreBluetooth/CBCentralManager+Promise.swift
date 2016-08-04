@@ -17,7 +17,7 @@ private class CentralManager: CBCentralManager, CBCentralManagerDelegate {
 }
 
 extension CBCentralManager {
-  
+
   public class func promise() -> CentralManagerPromise {
     let manager = CentralManager(delegate: nil, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: false])
     manager.delegate = manager

@@ -33,14 +33,13 @@ public enum EventKitError: Error {
 
  To import `EKEventStore`:
 
- use_frameworks!
- pod "PromiseKit/EventKit"
+     pod "PromiseKit/EventKit"
 
  And then in your sources:
 
- import PromiseKit
+     import PromiseKit
 
- @return A promise that fulfills with the EKEventStore.
+ - Returns: A promise that fulfills with the EKEventStore.
  */
 public func EKEventStoreRequestAccess() -> Promise<(EKEventStore)> {
     let eventStore = EKEventStore()
