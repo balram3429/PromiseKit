@@ -114,7 +114,7 @@ PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 
 | Xcode | Swift | PromiseKit |   CI Status  |   Release Notes   |
 | ----- | ----- | ---------- | ------------ | ----------------- |
-|   8   |  3.0  |      4     |  –           | [Pending][news-4] |
+|   8   |  3.0  |      4     | ![ci-swift3] | [Pending][news-4] |
 |   8   |  2.3  |      3     | ![ci-master] |                   |
 |   7   |  2.2  |      3     | ![ci-master] |                   |
 |   6   |  1.2  |      2     |  –           | [2015/05][news-2] |
@@ -145,6 +145,7 @@ Ask your question on [Gitter chat](https://gitter.im/mxcl/PromiseKit) or
 [travis]: https://travis-ci.org/mxcl/PromiseKit
 [ci-master]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [ci-legacy]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=legacy-1.x
+[ci-swift3]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-3.0
 [ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
 [ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
 [news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
