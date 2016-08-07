@@ -35,7 +35,7 @@ class PromiseTests: XCTestCase {
 
         DispatchQueue.global().promise {
             XCTAssertFalse(Thread.isMainThread)
-            return 1
+            return Promise(value: 1)
         }.then { (one: Int) -> Void in
             XCTAssertEqual(one, 1)
             ex.fulfill()
@@ -47,7 +47,7 @@ class PromiseTests: XCTestCase {
     func testDispatchQueueAsyncExtensionCanThrowInBody() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().promise { _ -> Int in
+        DispatchQueue.global().promise { _ -> Promise<Void> in
             throw Error.dummy
         }.then { _ -> Void in
             XCTFail()

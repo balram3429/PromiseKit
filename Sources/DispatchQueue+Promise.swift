@@ -13,17 +13,9 @@ import Dispatch
  - Returns: A new promise resolved by the result of the provided closure.
 */
 extension DispatchQueue {
+    @available(*, unavailable, message: "TODO URL")
     public func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: () throws -> T) -> Promise<T> {
-
-        return Promise(sealant: { resolve in
-            async(group: group, qos: qos, flags: flags) {
-                do {
-                    resolve(.fulfilled(try body()))
-                } catch {
-                    resolve(Resolution(error))
-                }
-            }
-        })
+        abort()
     }
 
     public func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: () throws -> Promise<T>) -> Promise<T> {

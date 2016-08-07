@@ -74,7 +74,7 @@ extension Task {
 
         launch()
 
-        return DispatchQueue.global().promise {
+        return DispatchQueue.global().promise { _ -> Promise<(Data, Data, Int)> in
             self.waitUntilExit()
 
             let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()
@@ -84,7 +84,7 @@ extension Task {
                 throw Error.execution(task: self, stdout: stdout, stderr: stderr)
             }
 
-            return (stdout, stderr, Int(self.terminationStatus))
+            return Promise(value: (stdout, stderr, Int(self.terminationStatus)))
         }
     }
 
