@@ -5,8 +5,8 @@ install:
   - carthage bootstrap --platform Mac
 
 script:
-  - xcodebuild -scheme PMKmacOS build test
-  - xcodebuild -scheme PMKiOS build test
+  - xcodebuild -scheme PMKmacOS build test | xcpretty
+  - xcodebuild -scheme PMKiOS build test | xcpretty
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
