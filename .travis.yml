@@ -1,22 +1,12 @@
 language: objective-c
-xcode_project: PromiseKit.xcodeproj
-xcode_scheme: [PMKiOS, PMKmacOS]
-xcode_sdk: [iphonesimulator10.0, macosx10.12]
 osx_image: xcode8
 
 install:
-  - gem install travis-xcodebuild
   - carthage bootstrap --platform Mac
 
 script:
-  - travis-xcodebuild
-
-matrix:
-  exclude:
-    - xcode_scheme: PMKmacOS
-      xcode_sdk: iphonesimulator10.0
-    - xcode_scheme: PMKiOS
-      xcode_sdk: macosx10.12
+  - xcodebuild -scheme PMKmacOS build test
+  - xcodebuild -scheme PMKiOS build test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
